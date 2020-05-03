@@ -48,37 +48,3 @@
     state: started
     enabled: yes
  
-# name: Install pymysql
-#  become: yes
-#  pip:
-#    name: pymysql
-#    state: present
-#
-#- name: Update Percona MySQL Server root password
-#  become: yes
-#  become_user: root
-#  mysql_user: name=root host={{ item }} password={{ mysql_root_password }} login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
-#  with_items:
-#    - 127.0.0.1
-#    - ::1
-#    - localhost
-#
-#- name: Create databases
-#  mysql_db:
-#    name: "{{ mysql_databases }}"
-#    state: present
-#    login_user: root
-#    login_password: "{{ mysql_root_password }}"
-#    
-#- name: "Create user {{ item.key }}"
-#  mysql_user:
-#    name: "{{ item.key }}"
-#    password: "{{ item.value.password }}"
-#    host: "{{ item.value.host }}"
-#    state: present
-#    update_password: on_create
-#    priv: "{{ item.value.priv }}"
-#    login_user: root
-#    login_password: "{{ mysql_root_password }}"
-#    check_implicit_admin: yes
-#  with_dict: "{{ mysql_users }}"
