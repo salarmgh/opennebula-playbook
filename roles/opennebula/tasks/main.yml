@@ -1,0 +1,6 @@
+---
+- name: Install opennebula sunstone
+  include_tasks: opennebula.yml
+
+- name: Install opennebula node
+  include_tasks: node.yml

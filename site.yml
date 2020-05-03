@@ -1,0 +1,4 @@
+---
+- hosts: opennebula
+  roles:
+    - role: opennebula

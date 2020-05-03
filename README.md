@@ -1,2 +1,2 @@
 # opennebula-playbook
-Opennebula installation
+Install opennebula on the servers

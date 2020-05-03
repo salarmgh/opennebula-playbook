@@ -1,0 +1,7 @@
+- name: Install opennebula node
+  become: yes
+  become_user: root
+  apt:
+    pkg:
+      - opennebula-node
+    state: present

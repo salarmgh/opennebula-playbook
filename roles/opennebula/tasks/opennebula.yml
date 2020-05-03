@@ -1,0 +1,84 @@
+---
+- name: Add opennebula key
+  apt_key:
+    url: https://downloads.opennebula.org/repo/repo.key
+    state: present
+
+- name: Add opennebula repo
+  apt_repository:
+    repo: deb https://downloads.opennebula.org/repo/5.10/Ubuntu/18.04 stable opennebula
+    state: present
+
+- name: Install opennebula sunstone
+  become: yes
+  become_user: root
+  apt:
+    pkg:
+      - opennebula
+      - opennebula-sunstone
+      - opennebula-gate
+      - opennebula-flow
+    state: present
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+- name: Set Sunstone password
+  template:
+    src: one_auth.j2
+    dest:
+      /var/lib/one/.one/one_auth
+
+- name: Opennebula configuration
+  template:
+    src: oned.conf.j2
+    dest:
+      /etc/one/oned.conf
+  notify:
+    - restart opennebula
+
+- name: enable opennebula service
+  systemd:
+    name: opennebula
+    state: started
+    enabled: yes
+
+- name: enable opennebula-sunstone service
+  systemd:
+    name: opennebula-sunstone
+    state: started
+    enabled: yes
+ 
+# name: Install pymysql
+#  become: yes
+#  pip:
+#    name: pymysql
+#    state: present
+#
+#- name: Update Percona MySQL Server root password
+#  become: yes
+#  become_user: root
+#  mysql_user: name=root host={{ item }} password={{ mysql_root_password }} login_user=root login_password={{ mysql_root_password }} check_implicit_admin=yes
+#  with_items:
+#    - 127.0.0.1
+#    - ::1
+#    - localhost
+#
+#- name: Create databases
+#  mysql_db:
+#    name: "{{ mysql_databases }}"
+#    state: present
+#    login_user: root
+#    login_password: "{{ mysql_root_password }}"
+#    
+#- name: "Create user {{ item.key }}"
+#  mysql_user:
+#    name: "{{ item.key }}"
+#    password: "{{ item.value.password }}"
+#    host: "{{ item.value.host }}"
+#    state: present
+#    update_password: on_create
+#    priv: "{{ item.value.priv }}"
+#    login_user: root
+#    login_password: "{{ mysql_root_password }}"
+#    check_implicit_admin: yes
+#  with_dict: "{{ mysql_users }}"
